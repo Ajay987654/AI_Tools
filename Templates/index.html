@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}AI Image Caption Generator{% endblock %}
+{% block content %}
+    <h1>😊 Face Mood Caption Generator</h1>
+    <p>Upload a photo and let AI detect the mood & create a fun caption!</p>
+
+    <form method="POST" enctype="multipart/form-data" onsubmit="showLoader()">
+        <input type="file" name="image" accept="image/*" required><br>
+        <p class="filename">Uploaded File: {{ image_filename }}</p>
+        <button type="submit">Generate Caption</button>
+    </form>
+
+    <!-- Loader -->
+    <div id="loader">⏳ AI is thinking Just a min<span>.</span><span>.</span><span>.</span></div>
+
+    {% if image_filename %}
+        <div>
+            <h3>Uploaded Image:</h3>
+            <img src="{{ url_for('uploaded_file', filename=image_filename) }}">
+        </div>
+    {% endif %}
+
+    {% if caption %}
+        <div class="caption-box {{ mood }}">
+            <h3>🎭 Generated Caption 🎭</h3>
+            <p class="emoji">{{ caption }}</p>
+        </div>
+
+        <!-- Form for recommending song -->
+        <form method="POST" onsubmit="showLoader()">
+            <input type="hidden" name="image_filename" value="{{ image_filename }}">
+            <input type="hidden" name="caption" value="{{ caption }}">
+            <input type="hidden" name="mood" value="{{ mood }}">
+            <button type="submit" name="recommend_song">Recommend Song</button>
+        </form>
+    {% endif %}
+
+    {% if song %}
+        <div class="song-box">
+            <h3>🎵 Recommended Song 🎵</h3>
+            <p class="emoji"><a href="{{ song.url }}" class="song-link" target="_blank">{{ song.title }}</a></p>
+        </div>
+    {% endif %}
+{% endblock %}
