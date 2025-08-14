@@ -83,6 +83,26 @@
             transform: scale(1.05);
         }
 
+        /* Language Button Style */
+        .language-btn {
+            background: #ffffff;
+            color: #1d2671;
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            display: inline-block;
+        }
+        .language-btn:hover {
+            background: #ff9800;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
         img {
             margin-top: 20px;
             border-radius: 12px;
@@ -238,66 +258,27 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-            h3 {
-                font-size: 1.3rem;
-            }
-            p {
-                font-size: 1.1rem;
-            }
-            nav {
-                top: 10px;
-                right: 10px;
-            }
-            nav li {
-                margin: 0 10px;
-            }
-            nav a {
-                font-size: 1rem;
-            }
-            input[type="file"] {
-                max-width: 100%;
-            }
-            img {
-                max-width: 100%;
-            }
-            .caption-box, .song-box {
-                max-width: 90%;
-                padding: 15px;
-            }
-            form {
-                padding: 15px;
-            }
-            .filename {
-                font-size: 0.9rem;
-            }
+            h1 { font-size: 2rem; }
+            h3 { font-size: 1.3rem; }
+            p { font-size: 1.1rem; }
+            nav { top: 10px; right: 10px; }
+            nav li { margin: 0 10px; }
+            nav a { font-size: 1rem; }
+            input[type="file"] { max-width: 100%; }
+            img { max-width: 100%; }
+            .caption-box, .song-box { max-width: 90%; padding: 15px; }
+            form { padding: 15px; }
+            .filename { font-size: 0.9rem; }
         }
 
         @media (max-width: 480px) {
-            nav ul {
-                flex-direction: column;
-                align-items: flex-end;
-            }
-            nav li {
-                margin: 8px 0;
-            }
-            h1 {
-                font-size: 1.8rem;
-            }
-            h3 {
-                font-size: 1.2rem;
-            }
-            p {
-                font-size: 1rem;
-            }
-            .content {
-                padding-top: 120px;
-            }
-            .filename {
-                font-size: 0.8rem;
-            }
+            nav ul { flex-direction: column; align-items: flex-end; }
+            nav li { margin: 8px 0; }
+            h1 { font-size: 1.8rem; }
+            h3 { font-size: 1.2rem; }
+            p { font-size: 1rem; }
+            .content { padding-top: 120px; }
+            .filename { font-size: 0.8rem; }
         }
     </style>
     <script>

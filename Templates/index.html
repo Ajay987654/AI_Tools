@@ -10,7 +10,6 @@
         <button type="submit">Generate Caption</button>
     </form>
 
-    <!-- Loader -->
     <div id="loader">⏳ AI is thinking Just a min<span>.</span><span>.</span><span>.</span></div>
 
     {% if image_filename %}
@@ -26,19 +25,37 @@
             <p class="emoji">{{ caption }}</p>
         </div>
 
-        <!-- Form for recommending song -->
+        <!-- Song Recommendation Form -->
         <form method="POST" onsubmit="showLoader()">
             <input type="hidden" name="image_filename" value="{{ image_filename }}">
             <input type="hidden" name="caption" value="{{ caption }}">
             <input type="hidden" name="mood" value="{{ mood }}">
-            <button type="submit" name="recommend_song">Recommend Song</button>
+
+            <label>Select Language:</label>
+            <select name="language">
+                <option value="tamil">Tamil</option>
+                <option value="hindi">Hindi</option>
+                <option value="telugu">Telugu</option>
+                <option value="malayalam">Malayalam</option>
+                <option value="kannada">Kannada</option>
+            </select>
+
+            <button type="submit" name="recommend_song">Recommend Songs</button>
         </form>
     {% endif %}
 
-    {% if song %}
+    {% if songs %}
         <div class="song-box">
-            <h3>🎵 Recommended Song 🎵</h3>
-            <p class="emoji"><a href="{{ song.url }}" class="song-link" target="_blank">{{ song.title }}</a></p>
+            <h3>🎵 Recommended {{ mood.capitalize() }} Songs 🎵</h3>
+            {% for s in songs %}
+                <div class="song-item">
+                    <p><b>{{ s.title }}</b> by {{ s.artist }}</p>
+                    <iframe src="https://open.spotify.com/embed/track/{{ s.id }}"
+                            width="300" height="80" frameborder="0"
+                            allowtransparency="true" allow="encrypted-media">
+                    </iframe>
+                </div>
+            {% endfor %}
         </div>
     {% endif %}
 {% endblock %}
