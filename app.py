@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = "static/uploads"
 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
-# Navbar data defined in Python
+# Navbar items for base.html
 NAVBAR_ITEMS = [
     {"name": "Home", "url": "/"},
     {"name": "Tools", "url": "/tools"},
@@ -19,7 +19,7 @@ NAVBAR_ITEMS = [
     {"name": "Contact Us", "url": "/contact"}
 ]
 
-# Your Gemini API Key
+# Gemini API Key
 GEMINI_API_KEY = "AIzaSyDRV8RMiZ0tp-zVu3QqrIdLCnBoVQXDJZo"
 genai.configure(api_key=GEMINI_API_KEY)
 
@@ -32,9 +32,11 @@ sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
     client_secret=SPOTIFY_CLIENT_SECRET
 ))
 
-# Model 
+# Model
 model = genai.GenerativeModel("gemini-1.5-flash")
 
+
+# ---------------- Helper Functions ---------------- #
 def detect_mood(caption_text):
     caption_lower = caption_text.lower()
     if any(word in caption_lower for word in ["happy", "smile", "joy", "laugh", "cheerful", "😊", "😁", "😂", "😍", "🥰"]):
@@ -46,6 +48,7 @@ def detect_mood(caption_text):
     else:
         return "neutral"
 
+
 def get_gemini_caption(image_path):
     image = Image.open(image_path)
     prompt = (
@@ -56,10 +59,8 @@ def get_gemini_caption(image_path):
     response = model.generate_content([prompt, image])
     return response.text.strip()
 
+
 def get_spotify_recommendations(mood, language="tamil", limit=8):
-    """
-    Get songs from Spotify based on mood + language.
-    """
     query = f"{mood} {language}"
     results = sp.search(q=query, type="track", limit=limit)
     songs = []
@@ -72,8 +73,15 @@ def get_spotify_recommendations(mood, language="tamil", limit=8):
         })
     return songs
 
+
+# ---------------- Routes ---------------- #
 @app.route("/", methods=["GET", "POST"])
 def index():
+    return render_template("index.html", navbar_items=NAVBAR_ITEMS)
+
+
+@app.route("/ai-caption", methods=["GET", "POST"])
+def ai_caption():
     caption = None
     mood = None
     songs = None
@@ -98,27 +106,40 @@ def index():
             language = request.form.get("language", "tamil")
             songs = get_spotify_recommendations(mood, language, limit=8)
 
-    return render_template("index.html", navbar_items=NAVBAR_ITEMS, caption=caption, mood=mood, songs=songs, image_filename=image_filename)
+    return render_template(
+        "ai_caption.html",
+        navbar_items=NAVBAR_ITEMS,
+        caption=caption,
+        mood=mood,
+        songs=songs,
+        image_filename=image_filename
+    )
+
 
 @app.route("/tools")
 def tools():
     return render_template("tools.html", navbar_items=NAVBAR_ITEMS)
 
+
 @app.route("/pricing")
 def pricing():
     return render_template("pricing.html", navbar_items=NAVBAR_ITEMS)
+
 
 @app.route("/about")
 def about():
     return render_template("about.html", navbar_items=NAVBAR_ITEMS)
 
+
 @app.route("/contact")
 def contact():
     return render_template("contact.html", navbar_items=NAVBAR_ITEMS)
 
+
 @app.route("/uploads/<filename>")
 def uploaded_file(filename):
     return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
